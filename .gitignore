@@ -1,0 +1,4 @@
+.DS_Store
+data/
+trained_model/
+train_code/__pycache__/
