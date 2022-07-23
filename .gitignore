@@ -2,3 +2,4 @@
 data/
 trained_model/
 train_code/__pycache__/
+.pre-commit-config.yaml
