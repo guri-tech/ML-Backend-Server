@@ -33,11 +33,11 @@ categorical_features = ['arrival_date_month','assigned_room_type','customer_type
 #                    max_depth=6, learning_rate=0.1, n_estimators=100, n_jobs=-1)
 xgb = XGBClassifier()
 clf = trianModel(xgb, x, y, numeric_features, categorical_features)
-
+preint(x.columns)
 # logi = LogisticRegression()
 # clf = trianModel(logi, x, y, numeric_features, categorical_features)
 
 
 # 모델 저장
-saveModel(clf, 'xgb.pkl')
+# saveModel(clf, 'xgb.pkl')
 # saveModel(clf, 'logistic.pkl')
