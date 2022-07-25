@@ -1,4 +1,4 @@
-from HotelMain import app
+from hotelAPI.main.hotelmain import app
 from fastapi.testclient import TestClient
 
 
