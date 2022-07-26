@@ -1,15 +1,7 @@
-from fastapi import APIRouter
-from Hotel_schema import IndependentVariable
-from Hotel_utils import model
 import pandas as pd
-
-router = APIRouter()
-
-@router.post("/predict")
-def predict(hotelvariable: IndependentVariable):
-
-    hotel_clf = model()
-    new_data = pd.DataFrame(data=
+from hotelAPI.schemas.hotel_schema import IndependentVariable
+def hotel_df(hotelvariable = IndependentVariable):
+    hotel_df = pd.DataFrame(data=
                             [[
                                 hotelvariable.adr,
                                 hotelvariable.adults,
@@ -69,4 +61,4 @@ def predict(hotelvariable: IndependentVariable):
                                 'total_of_special_requests'
                             ]
     )
-    return hotel_clf.predict(new_data).tolist()
+    return hotel_df

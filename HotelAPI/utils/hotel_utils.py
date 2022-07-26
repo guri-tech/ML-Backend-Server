@@ -1,3 +1,3 @@
 from joblib import load
-def model():
+def load_hotel():
     return load('./xgb.pkl')
