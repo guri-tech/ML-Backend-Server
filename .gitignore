@@ -1,9 +1,7 @@
 .DS_Store
-<<<<<<< HEAD
-train_code/__pycache__/
 .pre-commit-config.yaml
-=======
 data/
-trained_model/
 train_code/__pycache__/
->>>>>>> 7b78e6029fda734213ba9433010287f73124973d
+trained_model/
+mlflow/__pycache__/
+db/__pycache__/
