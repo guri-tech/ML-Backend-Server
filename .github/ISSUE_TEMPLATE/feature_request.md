@@ -12,8 +12,3 @@ assignees: lazychoi, soooobin, AstroNaut000, pastnfast
 
 ## 기능 추가 이유
 
-
-## 해결된 문제
-
-
-## 첨언
