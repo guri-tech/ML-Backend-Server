@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from hotelAPI.utils.hotel_utils import load_hotel
-from hotelAPI.utils.dataframe import hotel_df
-from hotelAPI.schemas.hotel_schema import IndependentVariable
+from utils.hotel_utils import load_hotel
+from utils.dataframe import hotel_df
+from schemas.hotel_schema import IndependentVariable
 router = APIRouter()
 
 @router.post("/predict")
