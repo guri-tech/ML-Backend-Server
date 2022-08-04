@@ -1,10 +1,6 @@
 import sys, os
-# p = os.path.abspath('.')
-# sys.path.insert(1, p)
 sys.path.append(os.pardir)
-import mlflow.sklearn
-import set_mlflow
-from train_code.del_columns import deleteColumns
+import mlflow
 from db.select_db import get_db
 
 from sklearn.model_selection import train_test_split
@@ -14,7 +10,11 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import classification_report, confusion_matrix, precision_score, recall_score, f1_score
 
-def compute_model_mlflow(model, x, y, numeric_features, categorical_features):
+
+def compute_model_mlflow(model, params, x, y, numeric_features, categorical_features):
+
+    mlflow.set_tracking_uri('http://127.0.0.1:5000')
+    mlflow.set_experiment('HOTEL-EXPERIMENT')
     mlflow.start_run()
 
     # 수치형 변수: SimpleImputer 결측치는 중앙값으로 대치 & 정규화
@@ -33,18 +33,16 @@ def compute_model_mlflow(model, x, y, numeric_features, categorical_features):
 
     x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.2, stratify=y_data)
 
-    mlflow.sklearn.autolog(serialization_format='pickle', registered_model_name=model.__module__)
     model.fit(x_train, y_train)
-    # print('best params: ', model.params)
-    # print('best score: ', model.best_score_)
+    # client = mlflow.tracking.MlflowClient()
+    # data = client.get_run(mlflow.active_run().info.run_id).data
+    # for i in data:
+    #     print(i)
 
     predicted_train = model.predict(x_train)
     predicted_test = model.predict(x_test)
     print(confusion_matrix(y_test, predicted_test))
     print(classification_report(y_test, predicted_test))
-
-    # model_name = model.__module__
-    # mlflow.sklearn.log_model(model, model_name)
 
     metrics = { "train precision":precision_score(y_train, predicted_train),
                 "train recall":recall_score(y_train, predicted_train),
@@ -53,7 +51,9 @@ def compute_model_mlflow(model, x, y, numeric_features, categorical_features):
                 "test recall":recall_score(y_test, predicted_test) ,
                 "test f1score":f1_score(y_test, predicted_test) }
 
-    # mlflow.log_params(model.params)
+    model_name = model.__module__
+    mlflow.sklearn.log_model(model, model_name, registered_model_name=model_name)
+    mlflow.log_params(params)
     mlflow.log_metrics(metrics)
 
     mlflow.end_run()
