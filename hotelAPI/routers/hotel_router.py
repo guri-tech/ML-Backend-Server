@@ -9,6 +9,8 @@ router = APIRouter()
 def predict(hotelvariable:hotel_features):
 
     hotel_clf = load_mlflow_hotel()
-    # print(dir(hotel_clf))
+    print(dir(hotel_clf))
     df = hotel_df(hotelvariable)
+
+    print(df.info())
     return hotel_clf.predict(df).tolist()
