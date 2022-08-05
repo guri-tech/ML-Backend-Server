@@ -1,6 +1,6 @@
 import pandas as pd
-from schemas.hotel_schema import IndependentVariable
-def hotel_df(hotelvariable = IndependentVariable):
+from schemas.hotel_schema import hotel_features
+def hotel_df(hotelvariable = hotel_features):
     hotel_df = pd.DataFrame(data=
                             [[
                                 hotelvariable.adr,
