@@ -1,0 +1,20 @@
+.DS_Store
+.pre-commit-config.yaml
+data/
+train_code/__pycache__/
+trained_model/
+mlflow/__pycache__/
+db/__pycache__/
+db/__pycache__/select_db.cpython-39.pyc
+nano.save
+hotelAPI/__pycache__/
+hotelAPI/main/ __pycache__/
+hotelAPI/routers/__pycache__/
+hotelAPI/schemas/__pycache__/
+hotelAPI/utlis/__pycache__/
+
+
+
+
+
+
