@@ -1,5 +1,5 @@
 import pandas as pd
-from hotelAPI.schemas.hotel_schema import IndependentVariable
+from schemas.hotel_schema import IndependentVariable
 def hotel_df(hotelvariable = IndependentVariable):
     hotel_df = pd.DataFrame(data=
                             [[
