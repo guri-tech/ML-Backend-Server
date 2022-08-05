@@ -5,3 +5,4 @@ train_code/__pycache__/
 trained_model/
 mlflow/__pycache__/
 db/__pycache__/
+db/__pycache__/select_db.cpython-39.pyc
