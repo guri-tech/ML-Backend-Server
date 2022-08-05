@@ -1,6 +1,5 @@
-from hotelAPI.main.hotelmain import app
+from hotelmain import app
 from fastapi.testclient import TestClient
-
 
 
 client = TestClient(app)
