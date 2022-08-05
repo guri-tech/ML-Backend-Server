@@ -7,13 +7,13 @@ x, y, numeric_features, categorical_features = pre_processing()
 # params = {'booster':'gbtree', 'max_depth':6, 'learning_rate':0.1, 'n_estimators':100, 'n_jobs':-1}
 # model = XGBClassifier(**params)
 
-# from sklearn.tree import DecisionTreeClassifier
-# params = {'max_depth':10, 'min_samples_leaf':4}
-# model = DecisionTreeClassifier(**params)
+from sklearn.tree import DecisionTreeClassifier
+params = {'max_depth':10, 'min_samples_leaf':4}
+model = DecisionTreeClassifier(**params)
 
-from sklearn.linear_model import LogisticRegression
-params = {'max_iter':100, 'solver':'saga', 'n_jobs':-1}
-model = LogisticRegression(**params)
+# from sklearn.linear_model import LogisticRegression
+# params = {'max_iter':100, 'solver':'saga', 'n_jobs':-1}
+# model = LogisticRegression(**params)
 
 # from sklearn.ensemble import RandomForestClassifier
 # model = RandomForestClassifier()

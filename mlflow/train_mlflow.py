@@ -22,25 +22,32 @@ def compute_model_mlflow(model, params, x, y, numeric_features, categorical_feat
     # 범주형 변수: 원핫인코딩
     categorical_transformer = OneHotEncoder(handle_unknown="ignore")
 
-    ### 원핫인코딩, 결측치 대치, 정규화
-    ct = ColumnTransformer([
+    # 전처리와 모델 학습 파이프라인 분리 -> mlflow에 전처리 과정이 저장 안 됨
+    # ct = ColumnTransformer([
+    #         ('numerical', numeric_transformer, numeric_features),
+    #         ('categorical', categorical_transformer, categorical_features)
+    #     ])
+    # x_data = ct.fit_transform(x)
+    # y_data = y.values.reshape(-1,)
+    # x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.2, stratify=y_data)
+
+    ## 원핫인코딩, 결측치 대치, 정규화
+    preprocessor = ColumnTransformer(transformers=[
             ('numerical', numeric_transformer, numeric_features),
             ('categorical', categorical_transformer, categorical_features),
         ])
+    clf = Pipeline( steps=[("preprocessor", preprocessor), ("classifier", model)] )
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y)
 
-    x_data = ct.fit_transform(x)
-    y_data = y.values.reshape(-1,)
 
-    x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.2, stratify=y_data)
-
-    model.fit(x_train, y_train)
+    clf.fit(x_train, y_train)
     # client = mlflow.tracking.MlflowClient()
     # data = client.get_run(mlflow.active_run().info.run_id).data
     # for i in data:
     #     print(i)
 
-    predicted_train = model.predict(x_train)
-    predicted_test = model.predict(x_test)
+    predicted_train = clf.predict(x_train)
+    predicted_test = clf.predict(x_test)
     print(confusion_matrix(y_test, predicted_test))
     print(classification_report(y_test, predicted_test))
 
@@ -51,11 +58,11 @@ def compute_model_mlflow(model, params, x, y, numeric_features, categorical_feat
                 "test recall":recall_score(y_test, predicted_test) ,
                 "test f1score":f1_score(y_test, predicted_test) }
 
-    model_name = model.__module__
-    mlflow.sklearn.log_model(model, model_name, registered_model_name=model_name)
+    clf_name = clf.__module__
+    mlflow.sklearn.log_model(clf, clf_name, registered_model_name=clf_name)
     mlflow.log_params(params)
     mlflow.log_metrics(metrics)
 
     mlflow.end_run()
 
-    return model
+    return clf
