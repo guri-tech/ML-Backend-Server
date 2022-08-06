@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class IndependentVariable(BaseModel):
+class hotel_features(BaseModel):
     adr: Optional[float] = 30.
     adults: Optional[int] = 0
     arrival_date_day_of_month: Optional[int] = 0
