@@ -1,10 +1,13 @@
 import mlflow.pyfunc
 
-def load_mlflow_hotel():
 
-    hotel_clf = mlflow.pyfunc.load_model(
-    model_uri="s3://mlflow/1/177778c21ec54229bf3845720960bfc6/artifacts/sklearn.pipeline"
-    )
+def load_mlflow_hotel():
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    mlflow.set_experiment("HOTEL-EXPERIMENT")
+    model_name = "sklearn.pipeline"
+
+    hotel_clf = mlflow.pyfunc.load_model(f"models:/{model_name}/Production")
+
     return hotel_clf
 
     
