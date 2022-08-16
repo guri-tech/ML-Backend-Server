@@ -1,3 +1,5 @@
+from operator import mod
+import os
 import mlflow
 from mlflow.tracking import MlflowClient
 from mlflow.models.signature import infer_signature
@@ -5,6 +7,7 @@ from mlflow.store.artifact.runs_artifact_repo import RunsArtifactRepository
 from typing import Any, Dict, Tuple
 from prefect import task
 import pandas as pd
+import numpy as np
 from sqlalchemy import create_engine
 
 from sklearn.model_selection import train_test_split
@@ -24,15 +27,15 @@ from sklearn.metrics import (
 
 @task(log_stdout=True)
 def get_data():
-    url = "postgresql://postgres:postgres@localhost:5432/hoteldb"
-    engine = create_engine(url)
 
-    sql = "SELECT * FROM hoteltb;"
+    engine = create_engine(os.getenv("DATABASE_URL"))
+
+    sql = "SELECT * FROM hoteltb WHERE is_canceled IS NOT NULL;"
     df = pd.read_sql(sql, con=engine)
     return df
 
 
-@task(log_stdout=True, nout=3)
+@task(log_stdout=True, nout=2)
 def preprocessing(df):
 
     # 결측치가 많거나 불필요해 보이는 컬럼 삭제
@@ -76,7 +79,34 @@ def preprocessing(df):
         -1,
     )
 
-    return x_data, y_data, ct
+    return x_data, y_data
+
+
+@task(log_stdout=True, nout=3)
+def set_model(choose_model):
+    if choose_model == 1:
+        from xgboost import XGBClassifier
+
+        params = {
+            "booster": "gbtree",
+            "objective": "binary:logistic",
+            "eval_metric": "logloss",
+            "max_depth": 6,
+            "learning_rate": 0.1,
+            "n_estimators": 200,
+            "n_jobs": -1,
+        }
+        model = XGBClassifier(use_label_encoder=False, **params)
+
+    elif choose_model == 2:
+        from sklearn.tree import DecisionTreeClassifier
+
+        params = {"max_depth": 20}
+        model = DecisionTreeClassifier(**params)
+
+    model_name = model.__class__.__name__
+
+    return model, params, model_name
 
 
 @task(log_stdout=True, nout=2)
@@ -97,6 +127,12 @@ def train_model(model, x, y):
         "test f1score": f1_score(y_test, predicted_test),
         "auc": roc_auc_score(y_test, model.predict_proba(x_test)[:, 1]),
     }
+    try:
+        if len(model.feature_importances_) != 0:
+            print(f"Feature importances: {np.round(model.feature_importances__, 2)}")
+    except Exception as e:
+        print(e)
+
     return model, metrics
 
 
@@ -137,7 +173,6 @@ def change_production_model(model_name, current_version, eval_metric):
     current_model = client.get_model_version(model_name, current_version)
 
     name_filter = f"name='{model_name}'"
-    client = MlflowClient()
     models = client.search_model_versions(name_filter)
 
     # get current Production model
