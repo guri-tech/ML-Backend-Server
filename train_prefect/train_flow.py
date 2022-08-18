@@ -10,6 +10,7 @@ from tasks import (
 
 with Flow("Hotel_train_Model") as flow:
     eval_metric = Parameter("Evaluation Metric", "auc")
+
     df = get_data()
     x, y = preprocessing(df)
     model, params, model_name = set_model(1)
@@ -18,4 +19,4 @@ with Flow("Hotel_train_Model") as flow:
     change_production_model(model_name, current_version, eval_metric)
 
 if __name__ == "__main__":
-    flow.run()
+    flow.register(project_name="hotel")

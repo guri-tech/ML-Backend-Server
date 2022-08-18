@@ -91,7 +91,7 @@ def set_model(choose_model):
             "booster": "gbtree",
             "objective": "binary:logistic",
             "eval_metric": "logloss",
-            "max_depth": 6,
+            "max_depth": 9,
             "learning_rate": 0.1,
             "n_estimators": 200,
             "n_jobs": -1,
