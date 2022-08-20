@@ -37,7 +37,9 @@ def get_data():
 
 @task(log_stdout=True, nout=2)
 def preprocessing(df):
-
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    mlflow.set_experiment("HOTEL-EXPERIMENT")
+    mlflow.start_run()
     # 결측치가 많거나 불필요해 보이는 컬럼 삭제
     del_col_names = [
         "agent",
@@ -71,14 +73,14 @@ def preprocessing(df):
     ct = ColumnTransformer(
         [
             ("numerical", numeric_transformer, numeric_features),
-            ("categorical", categorical_transformer, categorical_features),
+            ("categorical", categorical_transformer, categorical_features)
         ]
     )
+    
     x_data = ct.fit_transform(x)
-    y_data = y_data = y.values.reshape(
-        -1,
-    )
-
+    y_data = y.values.reshape(-1,)
+    mlflow.sklearn.log_model(ct, "preprocessor")
+    mlflow.end_run()
     return x_data, y_data
 
 
