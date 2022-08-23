@@ -19,5 +19,4 @@ with Flow("Hotel_train_Model") as flow:
     change_production_model(model_name, current_version, eval_metric)
 
 if __name__ == "__main__":
-    # flow.register(project_name="hotel")
     flow.run()

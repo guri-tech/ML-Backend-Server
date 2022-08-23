@@ -37,7 +37,6 @@ def get_data():
 
 @task(log_stdout=True, nout=2)
 def preprocessing(df):
-    # mlflow.set_tracking_uri("http://127.0.0.1:5000")
     mlflow.set_tracking_uri(os.getenv("MLFLOW_SET_TRACKING_URL"))
     mlflow.set_experiment("HOTEL-EXPERIMENT")
     mlflow.start_run()
@@ -144,7 +143,6 @@ def train_model(model, x, y):
 @task(log_stdout=True)
 def log_model(model, model_name, params, metrics, eval_metric):
 
-    # mlflow.set_tracking_uri("http://127.0.0.1:5000")
     mlflow.set_tracking_uri(os.getenv("MLFLOW_SET_TRACKING_URI"))
     mlflow.set_experiment("HOTEL-EXPERIMENT")
 
