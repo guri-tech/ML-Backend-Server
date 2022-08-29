@@ -1,13 +1,13 @@
+import os
 import pandas as pd
-import sqlalchemy
 from sqlalchemy import create_engine
+
 
 def get_db():
 
-    url = "postgresql://postgres:postgres@localhost:5432/hoteldb"
-    engine = create_engine(url)
+    engine = create_engine(os.getenv("DATABASE_URL"))
 
-    sql = 'SELECT * FROM hoteltb;'
+    sql = "SELECT * FROM hoteltb;"
     df = pd.read_sql(sql, con=engine)
 
     return df
