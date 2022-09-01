@@ -1,4 +1,5 @@
 from operator import mod
+from dotenv import load_dotenv
 import os
 import mlflow
 from mlflow.tracking import MlflowClient
@@ -23,7 +24,7 @@ from sklearn.metrics import (
     f1_score,
     roc_auc_score,
 )
-
+load_dotenv()
 
 @task(log_stdout=True)
 def get_data():
@@ -37,7 +38,7 @@ def get_data():
 
 @task(log_stdout=True, nout=2)
 def preprocessing(df):
-    mlflow.set_tracking_uri(os.getenv("MLFLOW_SET_TRACKING_URL"))
+    mlflow.set_tracking_uri(os.getenv("URI"))
     mlflow.set_experiment("HOTEL-EXPERIMENT")
     mlflow.start_run()
     # 결측치가 많거나 불필요해 보이는 컬럼 삭제
@@ -108,6 +109,12 @@ def set_model(choose_model):
         params = {"max_depth": 20}
         model = DecisionTreeClassifier(**params)
 
+    elif choose_model == 3:
+        from sklearn.ensemble import RandomForestClassifier
+        
+        params = {"max_depth": 20}
+        model = RandomForestClassifier(**params)
+        
     model_name = model.__class__.__name__
 
     return model, params, model_name
@@ -143,7 +150,7 @@ def train_model(model, x, y):
 @task(log_stdout=True)
 def log_model(model, model_name, params, metrics, eval_metric):
 
-    mlflow.set_tracking_uri(os.getenv("MLFLOW_SET_TRACKING_URI"))
+    mlflow.set_tracking_uri(os.getenv("URI"))
     mlflow.set_experiment("HOTEL-EXPERIMENT")
 
     with mlflow.start_run() as mlflow_run:
