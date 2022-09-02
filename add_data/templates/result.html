@@ -16,15 +16,37 @@
         <tr><td>예약 유형</td><td>
           {% set ms = {"Online TA":"여행사(온라인)", "Offline TA/TO":"여행사(오프라인)/여행기획사", "Groups":"단체", "Direct":" 호텔 직접 예약", "Corporate":"회사","Complementary":"무상 제공 물품", "Aviation":"항공사", "Undefined":"기타"}  %}
           {{ms[form_data["market_segment"]]}}</td></tr>
-        <tr><td>보증금 유무</td><td>
-          {% set deposit = {"No Deposit":"보증금 없음", "Non Refund":"환불 불가능", "Refundable":"환불 가능"} %}
-          {{ deposit[form_data["deposit_type"]] }}</td></tr>
+        <tr><td>고객 유형</td><td>
+          {% set customer = {"Contract":"예약 고객", "Group":"단체 고객", "Transient":"단기 고객", "Transient-Party":"반단기 고객"} %}
+          {{ customer[form_data["customer_type"]] }}</td></tr>
+        <tr><td>예약 경로</td><td>
+          {% set distribution = {"TA/TO":"여행사", "Direct":"직접 예약", "Corporate":"회사", "GDP":"GDS", "Undefined":"미상"} %}
+          {{ distribution[form_data["distribution_channel"]] }}</td></tr>
+        <tr><td>재방문 유무</td><td>
+          {% set repeated = {"0":"무", "1":"유"} %}
+          {{ repeated[form_data["is_repeated_guest"]] }}</td></tr>
+        <tr><td>예약 객실</td><td>
+          {% set reserved = {"A":"A", "B":"B", "C":"C", "D":"D", "E":"E", "F":"F", "G":"G", "H":"H", "L":"L", "P":"P"} %}
+          {{ reserved[form_data["reserved_room_type"]] }}</td></tr>
+        <tr><td>배정 객실</td><td>
+          {% set assigned = {"A":"A", "B":"B", "C":"C", "D":"D", "E":"E", "F":"F", "G":"G", "H":"H", "I":"I", "K":"K", "L":"L", "P":"P"} %}
+          {{ assigned[form_data["assigned_room_type"]] }}</td></tr>
+        <tr><td>식사</td><td>
+          {% set meal = {"BB":"숙박 & 조식", "HB":"조식 & (중식 or 석식)", "FB":"조식 & 중식 & 석식", "SC":"고객 준비", "Undefined":"불포함"}  %}
+          {{meal[form_data["meal"]]}}</td></tr>
         <tr><td>예약 기간</td><td>{{form_data["lead_time"]}}일</td></tr>
+        <tr><td>예약 확정까지의 소요 일수</td><td>{{form_data["days_in_waiting_list"]}}일</td></tr>
+        <tr><td>도착일 주차</td><td>{{form_data["arrival_date_week_number"]}}주차</td></tr>
+        <tr><td>주말 숙박 횟수</td><td>{{form_data["stays_in_weekend_nights"]}}회</td></tr>
         <tr><td>취소한 예약 횟수</td><td>{{form_data["previous_cancellations"]}}회</td></tr>
         <tr><td>취소 안 한 예약 횟수</td><td>{{form_data["previous_bookings_not_canceled"]}}회</td></tr>
         <tr><td>예약 확정까지의 소요 일수</td><td>{{form_data["days_in_waiting_list"]}}일</td></tr>
         <tr><td>예약 변경 횟수</td><td>{{form_data["booking_changes"]}}회</td></tr>
+        <tr><td>주차 대수</td><td>{{form_data["required_car_parking_spaces"]}}회</td></tr>
         <tr><td>특별 요청 횟수</td><td>{{form_data["total_of_special_requests"]}}회</td></tr>
+        <tr><td>성인 인원</td><td>{{form_data["adults"]}}명</td></tr>
+        <tr><td>어린이 인원</td><td>{{form_data["kids"]}}명</td></tr>
+        <tr><td>객실 요금</td><td>${{form_data["adr"]}}</td></tr>
       </table>
     </div>
     <div class="col">
@@ -35,7 +57,7 @@
         <p class="container-sm ms-4 h3 text-success">낮음</p>
       {% endif %}
         <h2 class="mt-4 mb-4">예약 취소 확률</h2>
-        <p class="container-sm ms-4 h3 text-info">{{ result["proba"] }}</p>
+        <p class="container-sm ms-4 h3 text-info">{{ result["proba"] }}%</p>
     </div>
   </div>
 </div>

@@ -26,11 +26,11 @@ def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form))
     data = dict(form_data)
     df = pd.DataFrame([data])
     pred, proba = predict(df)
-    result = {"predict": pred, "proba": proba}
+    result = {"predict": pred, "proba": round(proba * 100, 1)}
     return templates.TemplateResponse(
         "result.html", {"request": request, "form_data": data, "result": result}
     )
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", port=8002, reload=True)
+    uvicorn.run("main:app", port=8003, reload=True)

@@ -37,10 +37,21 @@ def as_form(cls: Type[BaseModel]):
 class HotelForm(BaseModel):
     hotel: str = None
     market_segment: str = None
-    deposit_type: str = None
+    customer_type: str = None
+    distribution_channel: str = None
+    is_repeated_guest: str = None
+    reserved_room_type: str = None
+    assigned_room_type: str = None
+    meal: str = None
     lead_time: int = None
+    days_in_waiting_list: int = None
+    arrival_date_week_number: int = None
+    stays_in_weekend_nights: int = None
     previous_cancellations: int = None
     previous_bookings_not_canceled: int = None
-    days_in_waiting_list: int = None
     booking_changes: int = None
+    required_car_parking_spaces: int = None
     total_of_special_requests: int = None
+    adults: int = None
+    kids: int = None
+    adr: int = None
