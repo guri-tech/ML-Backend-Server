@@ -1,34 +1,28 @@
 import pandas as pd
-from schemas.hotel_schema import IndependentVariable
-def hotel_df(hotelvariable = IndependentVariable):
+from schemas.hotel_schema import hotel_features
+def hotel_df(hotelvariable = hotel_features):
+
     hotel_df = pd.DataFrame(data=
-                            [[
-                                hotelvariable.adr,
-                                hotelvariable.adults,
-                                hotelvariable.arrival_date_day_of_month,
-                                hotelvariable.arrival_date_month,
-                                hotelvariable.arrival_date_week_number,
-                                hotelvariable.arrival_date_year,
-                                hotelvariable.assigned_room_type,
-                                hotelvariable.babies,
-                                hotelvariable.booking_changes,
-                                hotelvariable.children,
-                                hotelvariable.customer_type,
-                                hotelvariable.days_in_waiting_list,
-                                hotelvariable.deposit_type,
-                                hotelvariable.distribution_channel,
-                                hotelvariable.hotel,
-                                hotelvariable.is_repeated_guest,
-                                hotelvariable.lead_time,
-                                hotelvariable.market_segment,
-                                hotelvariable.meal,
-                                hotelvariable.previous_bookings_not_canceled,
-                                hotelvariable.previous_cancellations,
-                                hotelvariable.required_car_parking_spaces,
-                                hotelvariable.reserved_room_type,
-                                hotelvariable.stays_in_week_nights,
-                                hotelvariable.stays_in_weekend_nights,
-                                hotelvariable.total_of_special_requests
+                            [[hotelvariable.hotel,
+                            hotelvariable.market_segment,
+                            hotelvariable.customer_type,
+                            hotelvariable.distribution_channel,
+                            hotelvariable.is_repeated_guest,
+                            hotelvariable.reserved_room_type,
+                            hotelvariable.assigned_room_type,
+                            hotelvariable.meal,
+                            hotelvariable.lead_time,
+                            hotelvariable.days_in_waiting_list,
+                            hotelvariable.arrival_date_week_number,
+                            hotelvariable.stays_in_weekend_nights,
+                            hotelvariable.previous_cancellations,
+                            hotelvariable.previous_bookings_not_canceled,
+                            hotelvariable.booking_changes,
+                            hotelvariable.required_car_parking_spaces,
+                            hotelvariable.total_of_special_requests,
+                            hotelvariable.adults,
+                            hotelvariable.kids,
+                            hotelvariable.adr
                             ]],
 
                             columns=
@@ -59,6 +53,7 @@ def hotel_df(hotelvariable = IndependentVariable):
                                 'stays_in_week_nights',
                                 'stays_in_weekend_nights',
                                 'total_of_special_requests'
-                            ]
-    )
+
+                            ])
     return hotel_df
+
