@@ -8,7 +8,7 @@ import sys, os
 
 sys.path.append(os.pardir)
 from schemas import HotelForm
-from predict import predict
+from predict import predict_preprocessor, predict_pipeline
 
 
 app = FastAPI()
@@ -25,10 +25,12 @@ async def root(request: Request):
 def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form)):
     data = dict(form_data)
     df = pd.DataFrame([data])
-    pred, proba = predict(df)
+
+    pred, proba, metrics = predict_preprocessor(df)
     result = {"predict": pred, "proba": round(proba * 100, 1)}
     return templates.TemplateResponse(
-        "result.html", {"request": request, "form_data": data, "result": result}
+        "result.html",
+        {"request": request, "form_data": data, "result": result, "metrics": metrics},
     )
 
 

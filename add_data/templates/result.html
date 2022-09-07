@@ -35,29 +35,46 @@
           {% set meal = {"BB":"숙박 & 조식", "HB":"조식 & (중식 or 석식)", "FB":"조식 & 중식 & 석식", "SC":"고객 준비", "Undefined":"불포함"}  %}
           {{meal[form_data["meal"]]}}</td></tr>
         <tr><td>예약 기간</td><td>{{form_data["lead_time"]}}일</td></tr>
-        <tr><td>예약 확정까지의 소요 일수</td><td>{{form_data["days_in_waiting_list"]}}일</td></tr>
+        <tr><td>예약 확정까지 소요 일수</td><td>{{form_data["days_in_waiting_list"]}}일</td></tr>
         <tr><td>도착일 주차</td><td>{{form_data["arrival_date_week_number"]}}주차</td></tr>
         <tr><td>주말 숙박 횟수</td><td>{{form_data["stays_in_weekend_nights"]}}회</td></tr>
         <tr><td>취소한 예약 횟수</td><td>{{form_data["previous_cancellations"]}}회</td></tr>
-        <tr><td>취소 안 한 예약 횟수</td><td>{{form_data["previous_bookings_not_canceled"]}}회</td></tr>
         <tr><td>예약 확정까지의 소요 일수</td><td>{{form_data["days_in_waiting_list"]}}일</td></tr>
         <tr><td>예약 변경 횟수</td><td>{{form_data["booking_changes"]}}회</td></tr>
         <tr><td>주차 대수</td><td>{{form_data["required_car_parking_spaces"]}}회</td></tr>
         <tr><td>특별 요청 횟수</td><td>{{form_data["total_of_special_requests"]}}회</td></tr>
         <tr><td>성인 인원</td><td>{{form_data["adults"]}}명</td></tr>
-        <tr><td>어린이 인원</td><td>{{form_data["kids"]}}명</td></tr>
-        <tr><td>객실 요금</td><td>${{form_data["adr"]}}</td></tr>
+        <tr><td>어린이 인원</td><td>{{form_data["children"]}}명</td></tr>
+        <tr><td>유아 인원</td><td>{{form_data["babies"]}}명</td></tr>
+        <tr><td>객실 요금</td><td>{{form_data["adr"]}}</td></tr>
       </table>
     </div>
     <div class="col">
-      <h2 class="mb-4">예약 취소 가능성</h2>
-      {% if result["predict"] == 1 %}
-        <p class="container-sm ms-4 h3 text-danger">높음</p>
-      {% else %}
-        <p class="container-sm ms-4 h3 text-success">낮음</p>
-      {% endif %}
-        <h2 class="mt-4 mb-4">예약 취소 확률</h2>
-        <p class="container-sm ms-4 h3 text-info">{{ result["proba"] }}%</p>
+      <fieldset class="scheduler-border w-100">
+        <legend class="scheduler-border">예측 결과</legend>
+        <table class="w-100">
+          <tr>
+            <td class="w-50"><h4 class="mb-4">예약 취소 가능성</h4></td><td><h4 class="mb-4">예약 취소 확률</h4></td>
+          </tr>
+          <tr>
+            <td class="w-50">{% if result["predict"] == 1 %}
+              <p class="container-sm ms-4 h2 text-danger">높음</p>
+            {% else %}
+              <p class="container-sm ms-4 h3 text-success">낮음</p>
+            {% endif %}</td>
+            <td><p class="container-sm ms-4 h3 text-info">{{ result["proba"] }}%</p></td>
+          </tr>
+        </table>
+      </fieldset>
+      <fieldset class="scheduler-border w-100 mt-4">
+          <legend class="scheduler-border">성능 지표</legend>
+          <table class="w-100">
+            <tr><td class="w-50 text-secondary"><h4 class="text-secondary">auc</h4></td><td><h4 class="text-secondary">{{metrics["auc"] | round(4)}}</h4></td></tr>
+            <tr><td class="w-50 text-secondary"><h4 class="text-secondary">재현율(recall)</h4></td><td><h4 class="text-secondary">{{metrics["test recall"] | round(4)}}</h4></td></tr>
+            <tr><td class="w-50 text-secondary"><h4 class="text-secondary">정밀도(precision)</h4></td><td><h4 class="text-secondary">{{metrics["test precision"] | round(4)}}</h4></td></tr>
+            <tr><td class="w-50 text-secondary"><h4 class="text-secondary">정확도(accuracy)</h4></td><td><h4 class="text-secondary">{{metrics["test accuracy"] | round(4)}}</h4></td></tr>
+          </table>
+      </fieldset>
     </div>
   </div>
 </div>

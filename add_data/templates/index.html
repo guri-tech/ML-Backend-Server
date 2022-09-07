@@ -113,7 +113,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>예약 확정까지의 소요 일수</td>
+                    <td>예약 확정까지 소요 일수</td>
                     <td>
                         <input type="number" class="form-control" id="days_in_waiting_list" name="days_in_waiting_list"  placeholder="예약을 확정하기까지 걸린 일수를 입력하세요." required>
                     </td>
@@ -136,13 +136,6 @@
                         <input type="number" class="form-control" id="previous_cancellations" name="previous_cancellations" placeholder="이전에 예약을 취소한 횟수를 숫자로 입력하세요." required>
                     </td>
                 </tr>
-                <tr>
-                    <td>취소 안 한 예약 횟수</td>
-                    <td>
-                        <input type="number" class="form-control" id="previous_bookings_not_canceled" name="previous_bookings_not_canceled"  placeholder="이전에 예약을 취소하지 않은 횟수를 숫자로 입력하세요." required>
-                    </td>
-                </tr>
-
                 <tr>
                     <td>예약 변경 횟수</td>
                     <td>
@@ -170,13 +163,19 @@
                 <tr>
                     <td>어린이 인원</td>
                     <td>
-                        <input type="number" class="form-control" id="kids" name="kids"  placeholder="어린이 인원을 입력하세요." required>
+                        <input type="number" class="form-control" id="children" name="children"  placeholder="어린이 인원을 입력하세요." required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>유아 인원</td>
+                    <td>
+                        <input type="number" class="form-control" id="babies" name="babies"  placeholder="유아 인원을 입력하세요." required>
                     </td>
                 </tr>
                 <tr>
                     <td>객실 요금</td>
                     <td>
-                        <input type="number" class="form-control" id="adr" name="adr"  placeholder="객실 요금을 입력하세요." required>
+                        <input type="number" class="form-control" id="adr" name="adr"  placeholder="객실 요금을 입력하세요($)." required>
                     </td>
                 </tr>
             </tbody>

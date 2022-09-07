@@ -14,6 +14,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import (
     confusion_matrix,
+    accuracy_score,
     precision_score,
     recall_score,
     f1_score,
@@ -30,11 +31,25 @@ def get_data():
     df = pd.read_sql(sql, con=engine)
     df["is_repeated_guest"] = df["is_repeated_guest"].astype(object)  # 범주형 변수
     df["is_repeated_guest"] = df["is_repeated_guest"].apply(str)
-    df["kids"] = df["children"] + df["babies"]
-    temp = df["is_canceled"]
-    df.drop("is_canceled", axis=1, inplace=True)
-    df["is_canceled"] = temp
-    return df
+
+    # 결측치가 많거나 불필요한 컬럼 삭제
+    del_col_names = [
+        "agent",
+        "country",
+        "arrival_date_year",
+        "arrival_date_month",
+        "arrival_date_day_of_month",
+        "stays_in_week_nights",
+        "previous_bookings_not_canceled",
+        "deposit_type",
+        "company",
+        "reservation_status",
+        "reservation_status_date",
+    ]
+
+    df_new = df.drop(del_col_names, axis=1)
+
+    return df_new
 
 
 @task(log_stdout=True, nout=2)
@@ -46,9 +61,12 @@ def set_model():
         "booster": "gbtree",
         "objective": "binary:logistic",
         "eval_metric": "logloss",
-        "max_depth": 9,
+        "max_depth": 16,
         "learning_rate": 0.1,
-        "n_estimators": 200,
+        "n_estimators": 400,
+        "subsample": 0.9,
+        "max_delta_step": 5,
+        "gamma": 1,
         "n_jobs": -1,
     }
     model = XGBClassifier(use_label_encoder=False, **params)
@@ -59,25 +77,8 @@ def set_model():
 @task(log_stdout=True, nout=3)
 def preprocessing(df):
 
-    # 결측치가 많거나 불필요해 보이는 컬럼 삭제
-    del_col_names = [
-        "agent",
-        "stays_in_week_nights",
-        "children",
-        "babies",
-        "company",
-        "country",
-        "arrival_date_year",
-        "arrival_date_month",
-        "arrival_date_day_of_month",
-        "reservation_status",
-        "reservation_status_date",
-        "deposit_type",
-    ]
-    df_new = df.drop(del_col_names, axis=1)
-
-    x = df_new.iloc[:, :-1]
-    y = df_new.iloc[:, [-1]]
+    x = df.iloc[:, :-1]
+    y = df.iloc[:, [-1]]
 
     # 수치형 변수(int, float) 컬럼명
     numeric_features = x.select_dtypes(exclude=[object]).columns
@@ -120,9 +121,11 @@ def train_model(model, x, y):
     predicted_test = model.predict(x_test)
 
     metrics = {
+        "train accuracy": accuracy_score(y_train, predicted_train),
         "train precision": precision_score(y_train, predicted_train),
         "train recall": recall_score(y_train, predicted_train),
         "train f1score": f1_score(y_train, predicted_train),
+        "test accuracy": accuracy_score(y_test, predicted_test),
         "test precision": precision_score(y_test, predicted_test),
         "test recall": recall_score(y_test, predicted_test),
         "test f1score": f1_score(y_test, predicted_test),
@@ -171,20 +174,18 @@ def train_model_onepipeline(model, df):
     predicted_test = clf.predict(x_test)
 
     metrics = {
+        "train accuracy": accuracy_score(y_train, predicted_train),
         "train precision": precision_score(y_train, predicted_train),
         "train recall": recall_score(y_train, predicted_train),
         "train f1score": f1_score(y_train, predicted_train),
+        "test accuracy": accuracy_score(y_test, predicted_test),
         "test precision": precision_score(y_test, predicted_test),
         "test recall": recall_score(y_test, predicted_test),
         "test f1score": f1_score(y_test, predicted_test),
         "auc": roc_auc_score(y_test, clf.predict_proba(x_test)[:, 1]),
     }
-    try:
-        if len(clf.feature_importances_) != 0:
-            print(f"Feature importances: {np.round(clf.feature_importances__, 2)}")
-    except Exception as e:
-        print(e)
-
+    print("train confunsion matrix \n", confusion_matrix(y_train, predicted_train))
+    print("\n test confunsion matrix \n", confusion_matrix(y_test, predicted_test))
     return clf, metrics
 
 
@@ -218,7 +219,10 @@ def log_preprocessor(preprocessor):
             production_model = model
     if production_model is None:
         client.transition_model_version_stage(
-            "preprocessor", model_version.version, "Production"
+            "preprocessor",
+            model_version.version,
+            "Production",
+            archive_existing_versions=True,
         )
 
     return "Success"

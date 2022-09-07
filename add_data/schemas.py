@@ -48,10 +48,10 @@ class HotelForm(BaseModel):
     arrival_date_week_number: int = None
     stays_in_weekend_nights: int = None
     previous_cancellations: int = None
-    previous_bookings_not_canceled: int = None
     booking_changes: int = None
     required_car_parking_spaces: int = None
     total_of_special_requests: int = None
     adults: int = None
-    kids: int = None
+    children: int = None
+    babies: int = None
     adr: int = None
