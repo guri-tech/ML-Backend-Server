@@ -28,7 +28,6 @@ with Flow(
 ) as flow_with_preprocessor:
     eval_metric = Parameter("Evaluation Metric", "auc")
     model_name = "xgboost"
-    # model_name = "baggingclf"
 
     df = get_data()
     x, y, preprocessor = preprocessing(df)
@@ -40,5 +39,5 @@ with Flow(
 
 if __name__ == "__main__":
     flow_pipeline.register(project_name="hotel")
-    # flow_with_preprocessor.register(project_name="hotel")
+    flow_with_preprocessor.register(project_name="hotel")
     flow_with_preprocessor.run()

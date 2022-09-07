@@ -27,29 +27,10 @@ def get_data():
 
     engine = create_engine(os.getenv("DATABASE_URL"))
 
-    sql = "SELECT * FROM hoteltb WHERE is_canceled IS NOT NULL;"
+    sql = "SELECT * FROM bookingtb WHERE is_canceled IS NOT NULL;"
     df = pd.read_sql(sql, con=engine)
-    df["is_repeated_guest"] = df["is_repeated_guest"].astype(object)  # 범주형 변수
-    df["is_repeated_guest"] = df["is_repeated_guest"].apply(str)
 
-    # 결측치가 많거나 불필요한 컬럼 삭제
-    del_col_names = [
-        "agent",
-        "country",
-        "arrival_date_year",
-        "arrival_date_month",
-        "arrival_date_day_of_month",
-        "stays_in_week_nights",
-        "previous_bookings_not_canceled",
-        "deposit_type",
-        "company",
-        "reservation_status",
-        "reservation_status_date",
-    ]
-
-    df_new = df.drop(del_col_names, axis=1)
-
-    return df_new
+    return df
 
 
 @task(log_stdout=True, nout=2)
@@ -195,35 +176,31 @@ def log_preprocessor(preprocessor):
     mlflow.set_tracking_uri(os.getenv("URI"))
     mlflow.set_experiment("Default")
 
+    with mlflow.start_run() as pre_run:
+        model_info = mlflow.sklearn.log_model(preprocessor, "preprocessor")
+
     # search registered_models with same model_name
     client = MlflowClient()
     models = client.search_model_versions("name='preprocessor'")
 
     # if there isn't, log_model and register current model to product
     if len(models) == 0:
-        with mlflow.start_run() as pre_run:
-            model_info = mlflow.sklearn.log_model(preprocessor, "preprocessor")
-
         client.create_registered_model("preprocessor")
-        model_path = RunsArtifactRepository.get_underlying_uri(model_info.model_uri)
-        model_version = client.create_model_version(
-            "preprocessor",
-            model_path,
-            model_info.run_id,
-            description="filling, encoding, scaling preprocessor",
-        )
-    # if Production Model doesn't exist, set current model
-    production_model = None
-    for model in models:
-        if model.current_stage == "Production":
-            production_model = model
-    if production_model is None:
-        client.transition_model_version_stage(
-            "preprocessor",
-            model_version.version,
-            "Production",
-            archive_existing_versions=True,
-        )
+
+    model_path = RunsArtifactRepository.get_underlying_uri(model_info.model_uri)
+    model_version = client.create_model_version(
+        "preprocessor",
+        model_path,
+        model_info.run_id,
+        description="filling, encoding, scaling preprocessor",
+    )
+    # set Production
+    client.transition_model_version_stage(
+        "preprocessor",
+        model_version.version,
+        "Production",
+        archive_existing_versions=True,
+    )
 
     return "Success"
 

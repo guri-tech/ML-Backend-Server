@@ -8,7 +8,6 @@ mlflow.set_experiment("Default")
 
 def predict_preprocessor(df):
     model_name = "xgboost"
-    # model_name = "baggingclf"
 
     preprocessor = mlflow.sklearn.load_model(f"models:/preprocessor/Production")
     model = mlflow.sklearn.load_model(f"models:/{model_name}/Production")

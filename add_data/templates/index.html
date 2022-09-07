@@ -39,71 +39,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>고객 유형</td>
+                    <td>보증금 정책</td>
                     <td>
-                        <input type="radio" name="customer_type" value="Contract" checked> 예약 고객
-                        <input type="radio" name="customer_type" value="Group"> 단체 고객
-                        <input type="radio" name="customer_type" value="Transient"> 단기 고객
-                        <input type="radio" name="customer_type" value="Transient-Party"> 반단기 고객
-                    </td>
-                </tr>
-                <tr>
-                    <td>예약 경로</td>
-                    <td>
-                        <input type="radio" name="distribution_channel" value="TA/TO" checked> 여행사
-                        <input type="radio" name="distribution_channel" value="Direct"> 직접 예약
-                        <input type="radio" name="distribution_channel" value="Corporate"> 회사
-                        <input type="radio" name="distribution_channel" value="GDS"> GDS
-                        <input type="radio" name="distribution_channel" value="Undefined"> 미상
-                    </td>
-                </tr>
-                <tr>
-                    <td>재방문 유무</td>
-                    <td>
-                        <input type="radio" name="is_repeated_guest" value="0" checked> 무
-                        <input type="radio" name="is_repeated_guest" value="1"> 유
-                    </td>
-                </tr>
-                <tr>
-                    <td>예약 객실</td>
-                    <td>
-                        <input type="radio" name="reserved_room_type" value="A" checked> A
-                        <input type="radio" name="reserved_room_type" value="B"> B
-                        <input type="radio" name="reserved_room_type" value="C"> C
-                        <input type="radio" name="reserved_room_type" value="D"> D
-                        <input type="radio" name="reserved_room_type" value="E"> E
-                        <input type="radio" name="reserved_room_type" value="F"> F
-                        <input type="radio" name="reserved_room_type" value="G"> G
-                        <input type="radio" name="reserved_room_type" value="H"> H
-                        <input type="radio" name="reserved_room_type" value="L"> L
-                        <input type="radio" name="reserved_room_type" value="P"> P
-                    </td>
-                </tr>
-                <tr>
-                    <td>배정 객실</td>
-                    <td>
-                        <input type="radio" name="assigned_room_type" value="A" checked> A
-                        <input type="radio" name="assigned_room_type" value="B"> B
-                        <input type="radio" name="assigned_room_type" value="C"> C
-                        <input type="radio" name="assigned_room_type" value="D"> D
-                        <input type="radio" name="assigned_room_type" value="E"> E
-                        <input type="radio" name="assigned_room_type" value="F"> F
-                        <input type="radio" name="assigned_room_type" value="G"> G
-                        <input type="radio" name="assigned_room_type" value="H"> H
-                        <input type="radio" name="assigned_room_type" value="I"> I
-                        <input type="radio" name="assigned_room_type" value="K"> K
-                        <input type="radio" name="assigned_room_type" value="L"> L
-                        <input type="radio" name="assigned_room_type" value="P"> P
-                    </td>
-                </tr>
-                <tr>
-                    <td>식사</td>
-                    <td>
-                        <input type="radio" name="meal" value="BB" checked> 숙박 & 조식
-                        <input type="radio" name="meal" value="HB"> 조식 & (중식 or 석식)
-                        <input type="radio" name="meal" value="FB"> 조식 & 중식 & 석식
-                        <input type="radio" name="meal" value="SC"> 고객 준비
-                        <input type="radio" name="meal" value="Undefined"> 불포함
+                        <input type="radio" name="deposit_type" value="No Deposit" checked> 보증금 없음
+                        <input type="radio" name="deposit_type" value="Non Refund"> 환불 불가
+                        <input type="radio" name="deposit_type" value="Refundable"> 환불 가능
                     </td>
                 </tr>
                 <tr>
@@ -119,21 +59,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>도착일 주차</td>
-                    <td>
-                        <input type="number" class="form-control" id="arrival_date_week_number" name="arrival_date_week_number" placeholder="도착일에 해당하는 주차를 입력하세요." required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>주말 숙박 횟수</td>
-                    <td>
-                        <input type="number" class="form-control" id="stays_in_weekend_nights" name="stays_in_weekend_nights" placeholder="주말 숙박 횟수를 입력하세요." required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>취소한 예약 횟수</td>
+                    <td>취소 예약 횟수</td>
                     <td>
                         <input type="number" class="form-control" id="previous_cancellations" name="previous_cancellations" placeholder="이전에 예약을 취소한 횟수를 숫자로 입력하세요." required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>미취소 예약 횟수</td>
+                    <td>
+                        <input type="number" class="form-control" id="previous_bookings_not_canceled" name="previous_bookings_not_canceled" placeholder="이전에 예약을 취소하지 않은 횟수를 숫자로 입력하세요." required>
                     </td>
                 </tr>
                 <tr>
@@ -143,39 +77,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>주차 대수</td>
-                    <td>
-                        <input type="number" class="form-control" id="required_car_parking_spaces" name="required_car_parking_spaces"  placeholder="주차할 차량 대수를 입력하세요." required>
-                    </td>
-                </tr>
-                <tr>
                     <td>특별 요청 횟수</td>
                     <td>
                         <input type="number" class="form-control" id="total_of_special_requests" name="total_of_special_requests"  placeholder="고층 객실, 트윈 베드 같은 특별한 요청을 한 횟수를 입력하세요." required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>성인 인원</td>
-                    <td>
-                        <input type="number" class="form-control" id="adults" name="adults"  placeholder="성인 인원을 입력하세요." required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>어린이 인원</td>
-                    <td>
-                        <input type="number" class="form-control" id="children" name="children"  placeholder="어린이 인원을 입력하세요." required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>유아 인원</td>
-                    <td>
-                        <input type="number" class="form-control" id="babies" name="babies"  placeholder="유아 인원을 입력하세요." required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>객실 요금</td>
-                    <td>
-                        <input type="number" class="form-control" id="adr" name="adr"  placeholder="객실 요금을 입력하세요($)." required>
                     </td>
                 </tr>
             </tbody>
