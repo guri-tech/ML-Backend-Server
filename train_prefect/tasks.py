@@ -24,7 +24,9 @@ from sklearn.metrics import (
     f1_score,
     roc_auc_score,
 )
+
 load_dotenv()
+
 
 @task(log_stdout=True)
 def get_data():
@@ -111,10 +113,10 @@ def set_model(choose_model):
 
     elif choose_model == 3:
         from sklearn.ensemble import RandomForestClassifier
-        
+
         params = {"max_depth": 20}
         model = RandomForestClassifier(**params)
-        
+
     model_name = model.__class__.__name__
 
     return model, params, model_name
