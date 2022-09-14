@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      OS: ${{ matrix.os }}
+      # OS: ${{ matrix.os }}
       PYTHON: '3.9'
 
     steps:
