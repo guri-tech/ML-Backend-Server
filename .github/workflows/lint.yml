@@ -1,11 +1,13 @@
 name: Lint Code Base
 
-on: push
+on:
+  push:
+    branch-ignore: [main]
+  pull_request:
+    branches: [main, develop]
 
 jobs:
-  # Set the job key. The key is displayed as the job name
-  # when a job name is not provided
-  super-lint:
+  build:
     # Name the Job
     name: Lint Code Base
     # Set the type of machine to run on
@@ -18,11 +20,11 @@ jobs:
     steps:
       # Checks out a copy of your repository on the ubuntu-latest machine
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Runs the Super-Linter action
       - name: Lint Code Base
-        uses: github/super-linter@v3
+        uses: github/super-linter@v4
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

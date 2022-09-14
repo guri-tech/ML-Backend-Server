@@ -1,10 +1,9 @@
 import os
+import pandas as pd
 import mlflow
 from mlflow.tracking import MlflowClient
 from mlflow.store.artifact.runs_artifact_repo import RunsArtifactRepository
 from prefect import task
-import pandas as pd
-import numpy as np
 from sqlalchemy import create_engine
 
 from sklearn.model_selection import train_test_split
@@ -116,58 +115,6 @@ def train_model(model, x, y):
     print("train confunsion matrix \n", confusion_matrix(y_train, predicted_train))
     print("\n test confunsion matrix \n", confusion_matrix(y_test, predicted_test))
     return model, metrics
-
-
-@task(log_stdout=True, nout=2)
-def train_model_onepipeline(model, df):
-
-    x = df.iloc[:, :-1]
-    y = df.iloc[:, [-1]]
-
-    # 수치형 변수(int, float) 컬럼명
-    numeric_features = x.select_dtypes(exclude=["object"]).columns
-
-    # 범주형 변수(object) 컬럼명
-    categorical_features = x.select_dtypes(object).columns
-
-    # 수치형 변수: SimpleImputer 결측치는 중앙값으로 대치 & 정규화
-    numeric_transformer = Pipeline(
-        steps=[
-            ("imputer", SimpleImputer(strategy="median")),
-            ("scaler", StandardScaler()),
-        ]
-    )
-    # 범주형 변수: 원핫인코딩
-    categorical_transformer = OneHotEncoder()
-
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("numerical", numeric_transformer, numeric_features),
-            ("categorical", categorical_transformer, categorical_features),
-        ]
-    )
-    clf = Pipeline(steps=[("preprocessor", preprocessor), ("classifier", model)])
-
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y)
-    clf.fit(x_train, y_train)
-
-    predicted_train = clf.predict(x_train)
-    predicted_test = clf.predict(x_test)
-
-    metrics = {
-        "train accuracy": accuracy_score(y_train, predicted_train),
-        "train precision": precision_score(y_train, predicted_train),
-        "train recall": recall_score(y_train, predicted_train),
-        "train f1score": f1_score(y_train, predicted_train),
-        "test accuracy": accuracy_score(y_test, predicted_test),
-        "test precision": precision_score(y_test, predicted_test),
-        "test recall": recall_score(y_test, predicted_test),
-        "test f1score": f1_score(y_test, predicted_test),
-        "auc": roc_auc_score(y_test, clf.predict_proba(x_test)[:, 1]),
-    }
-    print("train confunsion matrix \n", confusion_matrix(y_train, predicted_train))
-    print("\n test confunsion matrix \n", confusion_matrix(y_test, predicted_test))
-    return clf, metrics
 
 
 @task(log_stdout=True)
