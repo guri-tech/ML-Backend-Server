@@ -33,6 +33,4 @@ class hotel_features(BaseModel):
     total_of_special_requests: Optional[int] = 0
     adults: Optional[int] = 0
     kids: Optional[int] = 0
-    adr: Optional[float] = 30.
-    
-
+    adr: Optional[float] = 30.0

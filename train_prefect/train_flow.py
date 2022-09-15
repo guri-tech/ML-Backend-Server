@@ -16,7 +16,9 @@ with Flow("Hotel_train_Model") as flow:
     model, params, model_name = set_model(1)
     trained_model, metrics = train_model(model, x_data, y_data)
     current_version = log_model(trained_model, model_name, params, metrics, eval_metric)
-    change_production_model(trained_model,model_name, current_version, eval_metric,x_data)
+    change_production_model(
+        trained_model, model_name, current_version, eval_metric, x_data
+    )
 
 if __name__ == "__main__":
     flow.run()

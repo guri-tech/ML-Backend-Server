@@ -1,4 +1,5 @@
 from operator import mod
+from dotenv import load_dotenv
 import os
 import mlflow
 from mlflow.tracking import MlflowClient
@@ -27,7 +28,11 @@ from dotenv import load_dotenv
 import redisai as rai
 from skl2onnx import convert_sklearn
 import numpy as np
-from skl2onnx.common.data_types import FloatTensorType,Int64TensorType,StringTensorType
+from skl2onnx.common.data_types import (
+    FloatTensorType,
+    Int64TensorType,
+    StringTensorType,
+)
 
 
 load_dotenv()
@@ -97,14 +102,30 @@ def preprocessing(df):
 @task(log_stdout=True, nout=3)
 def set_model(choose_model):
     if choose_model == 1:
-        from sklearn.ensemble import BaggingClassifier
+        from xgboost import XGBClassifier
 
         params = {
-            "n_estimators": 100,
+            "booster": "gbtree",
+            "objective": "binary:logistic",
+            "eval_metric": "logloss",
+            "max_depth": 9,
+            "learning_rate": 0.1,
+            "n_estimators": 200,
             "n_jobs": -1,
         }
-        model = BaggingClassifier(**params)
+        model = XGBClassifier(use_label_encoder=False, **params)
 
+    elif choose_model == 2:
+        from sklearn.tree import DecisionTreeClassifier
+
+        params = {"max_depth": 20}
+        model = DecisionTreeClassifier(**params)
+
+    elif choose_model == 3:
+        from sklearn.ensemble import RandomForestClassifier
+
+        params = {"max_depth": 20}
+        model = RandomForestClassifier(**params)
 
     model_name = model.__class__.__name__
 
@@ -112,9 +133,9 @@ def set_model(choose_model):
 
 
 @task(log_stdout=True, nout=2)
-def train_model(model,x_data, y_data):
+def train_model(model, x, y):
 
-    x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.2, stratify=y_data)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y)
     model.fit(x_train, y_train)
 
     predicted_train = model.predict(x_train)
@@ -167,10 +188,10 @@ def log_model(model, model_name, params, metrics, eval_metric):
 
 
 @task(log_stdout=True)
-def change_production_model(model,model_name, current_version, eval_metric,x_data):
+def change_production_model(model_name, current_version, eval_metric):
 
     production_model = None
-    train_model = model
+
     client = MlflowClient()
     current_model = client.get_model_version(model_name, current_version)
 
@@ -178,8 +199,8 @@ def change_production_model(model,model_name, current_version, eval_metric,x_dat
     models = client.search_model_versions(name_filter)
 
     # redisai Client 생성
-    redisai_client = rai.Client(host = 'localhost',port = 6379)
-    
+    redisai_client = rai.Client(host="localhost", port=6379)
+
     # get current Production model
     for model in models:
         if model.current_stage == "Production":
@@ -188,18 +209,20 @@ def change_production_model(model,model_name, current_version, eval_metric,x_dat
     if production_model is None:
 
         # redis model setting
-        redisai_client.set('new_model_name',str(train_model.__hash__()))
-        
-        initial_inputs = [('float_input',FloatTensorType([None,len(x_data[0])]))]
-        onnx_model = convert_sklearn(train_model, 'pipeline_titanic', initial_inputs,
-                             target_opset=12)
-        
-        convert_model_name = redisai_client.get('new_model_name')
-        redisai_client.modelstore(key = convert_model_name,
-                                    backend = 'onnx',
-                                    device = 'cpu',
-                                    data = onnx_model.SerializeToString())
+        redisai_client.set("new_model_name", str(train_model.__hash__()))
 
+        initial_inputs = [("float_input", FloatTensorType([None, len(x_data[0])]))]
+        onnx_model = convert_sklearn(
+            train_model, "pipeline_titanic", initial_inputs, target_opset=12
+        )
+
+        convert_model_name = redisai_client.get("new_model_name")
+        redisai_client.modelstore(
+            key=convert_model_name,
+            backend="onnx",
+            device="cpu",
+            data=onnx_model.SerializeToString(),
+        )
 
         client.transition_model_version_stage(
             current_model.name, current_model.version, "Production"
@@ -213,18 +236,21 @@ def change_production_model(model,model_name, current_version, eval_metric,x_dat
 
         if current_metric > production_metric:
             # redis model setting
-            redisai_client.set('new_model_name',str(train_model.__hash__()))
-            
-            initial_inputs = [('float_input',FloatTensorType([None,len(x_data[0])]))]
+            redisai_client.set("new_model_name", str(train_model.__hash__()))
+
+            initial_inputs = [("float_input", FloatTensorType([None, len(x_data[0])]))]
             name = model.__module__
-            onnx_model = convert_sklearn(train_model, name, initial_inputs,
-                                target_opset=12)
-            
-            convert_model_name = redisai_client.get('new_model_name')
-            redisai_client.modelstore(key = convert_model_name,
-                                    backend = 'onnx',
-                                    device = 'cpu',
-                                    data = onnx_model.SerializeToString())
+            onnx_model = convert_sklearn(
+                train_model, name, initial_inputs, target_opset=12
+            )
+
+            convert_model_name = redisai_client.get("new_model_name")
+            redisai_client.modelstore(
+                key=convert_model_name,
+                backend="onnx",
+                device="cpu",
+                data=onnx_model.SerializeToString(),
+            )
 
             client.transition_model_version_stage(
                 current_model.name,

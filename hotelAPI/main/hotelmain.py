@@ -4,7 +4,7 @@ sys.path.append(os.pardir)
 from fastapi import FastAPI
 
 import routers.hotel_router
-
+import uvicorn
 
 
 app = FastAPI()
