@@ -1,7 +1,7 @@
 import mlflow.sklearn
 
 def load_mlflow_hotel():
-    
+
     mlflow.set_tracking_uri("http://127.0.0.1:5000")
     mlflow.set_experiment("HOTEL-EXPERIMENT")
 
@@ -12,4 +12,3 @@ def load_mlflow_hotel():
 
 
     return hotel_clf,preprocessor
-

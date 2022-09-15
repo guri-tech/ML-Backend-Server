@@ -32,6 +32,7 @@ from skl2onnx.common.data_types import FloatTensorType,Int64TensorType,StringTen
 
 load_dotenv()
 
+
 @task(log_stdout=True)
 def get_data():
 
