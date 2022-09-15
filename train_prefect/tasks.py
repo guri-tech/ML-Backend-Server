@@ -24,6 +24,16 @@ from sklearn.metrics import (
     f1_score,
     roc_auc_score,
 )
+from dotenv import load_dotenv
+import redisai as rai
+from skl2onnx import convert_sklearn
+import numpy as np
+from skl2onnx.common.data_types import (
+    FloatTensorType,
+    Int64TensorType,
+    StringTensorType,
+)
+
 
 load_dotenv()
 
@@ -188,12 +198,32 @@ def change_production_model(model_name, current_version, eval_metric):
     name_filter = f"name='{model_name}'"
     models = client.search_model_versions(name_filter)
 
+    # redisai Client 생성
+    redisai_client = rai.Client(host="localhost", port=6379)
+
     # get current Production model
     for model in models:
         if model.current_stage == "Production":
             production_model = model
     # if there is not Production model
     if production_model is None:
+
+        # redis model setting
+        redisai_client.set("new_model_name", str(train_model.__hash__()))
+
+        initial_inputs = [("float_input", FloatTensorType([None, len(x_data[0])]))]
+        onnx_model = convert_sklearn(
+            train_model, "pipeline_titanic", initial_inputs, target_opset=12
+        )
+
+        convert_model_name = redisai_client.get("new_model_name")
+        redisai_client.modelstore(
+            key=convert_model_name,
+            backend="onnx",
+            device="cpu",
+            data=onnx_model.SerializeToString(),
+        )
+
         client.transition_model_version_stage(
             current_model.name, current_model.version, "Production"
         )
@@ -205,6 +235,23 @@ def change_production_model(model_name, current_version, eval_metric):
         ]
 
         if current_metric > production_metric:
+            # redis model setting
+            redisai_client.set("new_model_name", str(train_model.__hash__()))
+
+            initial_inputs = [("float_input", FloatTensorType([None, len(x_data[0])]))]
+            name = model.__module__
+            onnx_model = convert_sklearn(
+                train_model, name, initial_inputs, target_opset=12
+            )
+
+            convert_model_name = redisai_client.get("new_model_name")
+            redisai_client.modelstore(
+                key=convert_model_name,
+                backend="onnx",
+                device="cpu",
+                data=onnx_model.SerializeToString(),
+            )
+
             client.transition_model_version_stage(
                 current_model.name,
                 current_model.version,

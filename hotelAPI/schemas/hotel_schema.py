@@ -24,8 +24,13 @@ class hotel_features(BaseModel):
     meal: Optional[str] = "BB"
     previous_bookings_not_canceled: Optional[int] = 0
     previous_cancellations: Optional[int] = 0
+    previous_bookings_not_canceled: Optional[int] = 0
+    booking_changes: Optional[int] = 0
     required_car_parking_spaces: Optional[int] = 0
     reserved_room_type: Optional[str] = "A"
     stays_in_week_nights: Optional[int] = 0
     stays_in_weekend_nights: Optional[int] = 0
     total_of_special_requests: Optional[int] = 0
+    adults: Optional[int] = 0
+    kids: Optional[int] = 0
+    adr: Optional[float] = 30.0
