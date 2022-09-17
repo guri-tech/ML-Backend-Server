@@ -8,3 +8,4 @@ train_prefect/nohup.out
 /home/jb/ML-Backend-Server/hotelAPI/utils/ddd.py
 /home/jb/ML-Backend-Server/hotelAPI/schemas/shc.py
 /home/jb/ML-Backend-Server/hotelAPI/routers/test.py
+__pycache__
