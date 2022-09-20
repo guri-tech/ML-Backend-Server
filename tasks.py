@@ -193,7 +193,7 @@ def change_production_model(
     if production_model is None:
 
         # redis model setting
-        redis_setting_call(train_model,redis_vari_num)
+        redis_setting_call(train_model, redis_vari_num)
 
         client.transition_model_version_stage(
             current_model.name, current_model.version, "Production"
@@ -207,7 +207,7 @@ def change_production_model(
 
         if current_metric > production_metric:
             # redis model setting
-            redis_setting_call(train_model,redis_vari_num)
+            redis_setting_call(train_model, redis_vari_num)
 
             client.transition_model_version_stage(
                 current_model.name,

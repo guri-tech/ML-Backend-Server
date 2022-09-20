@@ -4,7 +4,7 @@ import redisai as rai
 import numpy as np
 from uuid import uuid4
 from schemas import HotelForm
-from fastapi import APIRouter, Request, Depends,BackgroundTasks
+from fastapi import APIRouter, Request, Depends, BackgroundTasks
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 

@@ -1,5 +1,5 @@
-def redis_setting_call(train_model,redis_vari_num):
-    
+def redis_setting_call(train_model, redis_vari_num):
+
     redisai_client.set("new_model_name", str(train_model.__hash__()))
 
     initial_inputs = [("float_input", FloatTensorType([None, redis_vari_num]))]
