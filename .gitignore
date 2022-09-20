@@ -1,10 +1,3 @@
-train_prefect/mlruns/
-train_prefect/nohup.out
-/home/jb/ML-Backend-Server/hotelAPI/ttest.ipynb
-/home/jb/ML-Backend-Server/hotelAPI/tasks.py
-/home/jb/ML-Backend-Server/hotelAPI/sub.py
-/home/jb/ML-Backend-Server/hotelAPI/pray.py
-/home/jb/ML-Backend-Server/hotelAPI/.env
-/home/jb/ML-Backend-Server/hotelAPI/utils/ddd.py
-/home/jb/ML-Backend-Server/hotelAPI/schemas/shc.py
-/home/jb/ML-Backend-Server/hotelAPI/routers/test.py
+__pycache__
+mlruns/0/meta.yaml
+mlruns

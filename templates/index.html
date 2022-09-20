@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>호텔 데이터 입력 및 취소 여부 예측</title>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid p-5 bg-primary text-white text-center">
+    <h1 class="display-4 hantitle">호텔 데이터 입력 및 취소 여부 예측</h1>
+</div>
+<div class="container mt-3">
+    <form action="/predict" method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>항목</th><th>입력사항</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>호텔</td>
+                    <td>
+                        <input type="radio" name="hotel" value="City Hotel" checked> City Hotel
+                        <input type="radio" name="hotel" value="Resort Hotel"> Resort Hotel
+                    </td>
+                </tr>
+                <tr>
+                    <td>예약 유형</td>
+                    <td>
+                        <input type="radio" name="market_segment" value="Online TA" checked> 여행사(온라인)
+                        <input type="radio" name="market_segment" value="Offline TA/TO"> 여행사(오프라인)/여행기획사
+                        <input type="radio" name="market_segment" value="Direct"> 호텔 직접 예약
+                        <br>
+                        <input type="radio" name="market_segment" value="Groups"> 단체
+                        <input type="radio" name="market_segment" value="Corporate"> 회사
+                        <input type="radio" name="market_segment" value="Complementary"> 무상 서비스
+                        <input type="radio" name="market_segment" value="Aviation"> 항공사
+                        <input type="radio" name="market_segment" value="Undefined"> 기타
+                    </td>
+                </tr>
+                <tr>
+                    <td>보증금 정책</td>
+                    <td>
+                        <input type="radio" name="deposit_type" value="No Deposit" checked> 보증금 없음
+                        <input type="radio" name="deposit_type" value="Non Refund"> 환불 불가
+                        <input type="radio" name="deposit_type" value="Refundable"> 환불 가능
+                    </td>
+                </tr>
+                <tr>
+                    <td>예약 기간</td>
+                    <td>
+                        <input type="number" class="form-control" id="lead_time" name="lead_time" placeholder="체크인까지 남은 일수를 숫자로 기록하세요." required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>예약 확정까지 소요 일수</td>
+                    <td>
+                        <input type="number" class="form-control" id="days_in_waiting_list" name="days_in_waiting_list"  placeholder="예약을 확정하기까지 걸린 일수를 입력하세요." required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>취소 예약 횟수</td>
+                    <td>
+                        <input type="number" class="form-control" id="previous_cancellations" name="previous_cancellations" placeholder="이전에 예약을 취소한 횟수를 숫자로 입력하세요." required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>미취소 예약 횟수</td>
+                    <td>
+                        <input type="number" class="form-control" id="previous_bookings_not_canceled" name="previous_bookings_not_canceled" placeholder="이전에 예약을 취소하지 않은 횟수를 숫자로 입력하세요." required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>예약 변경 횟수</td>
+                    <td>
+                        <input type="number" class="form-control" id="booking_changes" name="booking_changes"  placeholder="예약을 변경한 적이 있다면 그 횟수를 입력하세요" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>특별 요청 횟수</td>
+                    <td>
+                        <input type="number" class="form-control" id="total_of_special_requests" name="total_of_special_requests"  placeholder="고층 객실, 트윈 베드 같은 특별한 요청을 한 횟수를 입력하세요." required>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">전송</button>
+    </form>
+</div>
+{% endblock %}
