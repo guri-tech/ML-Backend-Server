@@ -26,6 +26,7 @@ from skl2onnx.common.data_types import (
     FloatTensorType,
 )
 import environment
+from utills.utils_redis import redis_setting_call
 
 
 @task(log_stdout=True)
@@ -192,20 +193,7 @@ def change_production_model(
     if production_model is None:
 
         # redis model setting
-        redisai_client.set("new_model_name", str(train_model.__hash__()))
-
-        initial_inputs = [("float_input", FloatTensorType([None, redis_vari_num]))]
-        onnx_model = convert_sklearn(
-            train_model, initial_types=initial_inputs, target_opset=12
-        )
-
-        convert_model_name = redisai_client.get("new_model_name")
-        redisai_client.modelstore(
-            key=convert_model_name,
-            backend="onnx",
-            device="cpu",
-            data=onnx_model.SerializeToString(),
-        )
+        redis_setting_call(train_model,redis_vari_num)
 
         client.transition_model_version_stage(
             current_model.name, current_model.version, "Production"
@@ -219,20 +207,7 @@ def change_production_model(
 
         if current_metric > production_metric:
             # redis model setting
-            redisai_client.set("new_model_name", str(train_model.__hash__()))
-
-            initial_inputs = [("float_input", FloatTensorType([None, redis_vari_num]))]
-            onnx_model = convert_sklearn(
-                train_model, initial_types=initial_inputs, target_opset=12
-            )
-
-            convert_model_name = redisai_client.get("new_model_name")
-            redisai_client.modelstore(
-                key=convert_model_name,
-                backend="onnx",
-                device="cpu",
-                data=onnx_model.SerializeToString(),
-            )
+            redis_setting_call(train_model,redis_vari_num)
 
             client.transition_model_version_stage(
                 current_model.name,

@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
@@ -23,4 +23,4 @@ async def root(request: Request):
 app.include_router(routers.router)
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", port=8003, reload=True)
+    uvicorn.run("main:app", port=8000, reload=True)

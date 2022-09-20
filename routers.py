@@ -4,12 +4,12 @@ import redisai as rai
 import numpy as np
 from uuid import uuid4
 from schemas import HotelForm
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends,BackgroundTasks
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
 sys.path.append(os.pardir)
-from utils import predict_preprocessor
+from utills.utils import predict_preprocessor
 import environment
 
 # router
