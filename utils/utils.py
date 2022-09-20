@@ -1,7 +1,10 @@
 import os
 import mlflow
 import environment
+
 client = environment.mlflow_c()
+
+
 def predict_preprocessor(df):
     model_name = "xgboost"
     preprocessor = mlflow.sklearn.load_model(f"models:/preprocessor/Production")

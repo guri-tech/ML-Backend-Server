@@ -10,7 +10,8 @@ from starlette.templating import Jinja2Templates
 
 sys.path.append(os.pardir)
 from utils.utils import predict_preprocessor
-import environment 
+import environment
+
 redisai_client = environment.redis_r()
 
 # router
@@ -18,9 +19,10 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 id = str(uuid4())
 
+
 @router.post("/predict", response_class=HTMLResponse)
 def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form)):
-    
+
     data = dict(form_data)
     df = pd.DataFrame([data])
     preprocessor, metrics = predict_preprocessor(df)

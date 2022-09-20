@@ -27,8 +27,10 @@ from skl2onnx.common.data_types import (
 )
 from utils.utils_redis import redis_setting_call
 import environment
+
 client = environment.mlflow_c()
 redisai_client = environment.redis_r()
+
 
 @task(log_stdout=True)
 def get_data():
