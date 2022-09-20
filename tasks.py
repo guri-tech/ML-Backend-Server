@@ -25,9 +25,10 @@ import numpy as np
 from skl2onnx.common.data_types import (
     FloatTensorType,
 )
+from utils.utils_redis import redis_setting_call
 import environment
-from utills.utils_redis import redis_setting_call
-
+client = environment.mlflow_c()
+redisai_client = environment.redis_r()
 
 @task(log_stdout=True)
 def get_data():
@@ -120,7 +121,6 @@ def log_preprocessor(preprocessor):
         model_info = mlflow.sklearn.log_model(preprocessor, "preprocessor")
 
     # search registered_models with same model_name
-    client = MlflowClient()
     models = client.search_model_versions("name='preprocessor'")
 
     # if there isn't, log_model and register current model to product

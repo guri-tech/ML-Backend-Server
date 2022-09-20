@@ -1,10 +1,16 @@
 import redisai as rai
+from mlflow.tracking import MlflowClient
 import mlflow
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
+def mlflow_c():
 
-redisai_client = rai.Client(host="localhost", port=6379)
+    client = MlflowClient()
+    return client 
+
+def redis_r():
+    redisai_client = rai.Client(host="localhost", port=6379)
+    return redisai_client
+    
 mlflow.set_tracking_uri(os.getenv("URI"))
 mlflow.set_experiment("Default")

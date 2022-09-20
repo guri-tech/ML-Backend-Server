@@ -3,10 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
-import pandas as pd
-import sys, os
 
-sys.path.append(os.pardir)
 import routers
 
 app = FastAPI()

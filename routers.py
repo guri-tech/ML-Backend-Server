@@ -1,6 +1,5 @@
 import sys, os
 import pandas as pd
-import redisai as rai
 import numpy as np
 from uuid import uuid4
 from schemas import HotelForm
@@ -8,20 +7,20 @@ from fastapi import APIRouter, Request, Depends, BackgroundTasks
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
+
 sys.path.append(os.pardir)
-from utills.utils import predict_preprocessor
-import environment
+from utils.utils import predict_preprocessor
+import environment 
+redisai_client = environment.redis_r()
 
 # router
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-redisai_client = rai.Client(host="localhost", port=6379)
 id = str(uuid4())
-
 
 @router.post("/predict", response_class=HTMLResponse)
 def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form)):
-
+    
     data = dict(form_data)
     df = pd.DataFrame([data])
     preprocessor, metrics = predict_preprocessor(df)
