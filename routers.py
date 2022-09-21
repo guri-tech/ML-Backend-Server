@@ -27,18 +27,25 @@ def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form))
     df = pd.DataFrame([data])
     preprocessor, metrics = predict_preprocessor(df)
 
-    redisai_client.tensorset(
-        f"{id}_hotel_input", preprocessor.transform(df).astype(np.float32)
-    )
-    redisai_client.expire(f"{id}_hotel_input", 60)
+    ### 여기부터
+    import mlflow
 
-    model_name = redisai_client.get("new_model_name")
-    redisai_client.modelexecute(
-        key=model_name,
-        inputs=[f"{id}_hotel_input"],
-        outputs=[f"{id}_output_tensor_class", f"{id}_output_tensor_proba"],
-    )
-    pred = redisai_client.tensorget(f"{id}_output_tensor_class")
+    model = mlflow.sklearn.load_model(f"models:/RandomForestClassifier/Production")
+    pred = model.predict(preprocessor)
+    ### 여기까지 테스트용
+
+    # redisai_client.tensorset(
+    #     f"{id}_hotel_input", preprocessor.transform(df).astype(np.float32)
+    # )
+    # redisai_client.expire(f"{id}_hotel_input", 60)
+
+    # model_name = redisai_client.get("new_model_name")
+    # redisai_client.modelexecute(
+    #     key=model_name,
+    #     inputs=[f"{id}_hotel_input"],
+    #     outputs=[f"{id}_output_tensor_class", f"{id}_output_tensor_proba"],
+    # )
+    # pred = redisai_client.tensorget(f"{id}_output_tensor_class")
 
     result = {"predict": pred}
     return templates.TemplateResponse(
