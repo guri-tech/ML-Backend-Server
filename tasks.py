@@ -18,7 +18,6 @@ from sklearn.metrics import (
     f1_score,
     roc_auc_score,
 )
-from sklearn.ensemble import RandomForestClassifier
 import redisai as rai
 from skl2onnx import convert_sklearn
 import numpy as np
@@ -41,16 +40,6 @@ def get_data():
     df = pd.read_sql(sql, con=engine)
 
     return df
-
-
-@task(log_stdout=True, nout=3)
-def set_model():
-
-    params = {"n_estimators": 100, "max_depth": 4, "min_samples_split": 3}
-    model = RandomForestClassifier(**params)
-
-    model_name = model.__class__.__name__
-    return model, params, model_name
 
 
 @task(log_stdout=True, nout=4)
