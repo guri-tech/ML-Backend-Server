@@ -19,12 +19,7 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from sklearn.ensemble import RandomForestClassifier
-import redisai as rai
-from skl2onnx import convert_sklearn
-import numpy as np
-from skl2onnx.common.data_types import (
-    FloatTensorType,
-)
+
 from utils.utils_redis import redis_setting_call
 import environment
 

@@ -1,5 +1,6 @@
 import environment
-
+from skl2onnx import convert_sklearn
+from skl2onnx.common.data_types import FloatTensorType
 redisai_client = environment.redis_r()
 
 

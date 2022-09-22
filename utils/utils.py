@@ -5,8 +5,8 @@ import environment
 client = environment.mlflow_c()
 
 
-def predict_preprocessor(df):
-    model_name = "xgboost"
+def predict_preprocessor():
+    model_name = "RandomForestClassifier"
     preprocessor = mlflow.sklearn.load_model(f"models:/preprocessor/Production")
 
     # # get model metrics
