@@ -48,7 +48,7 @@ with Flow(name="Hotel_svm", run_config=LocalRun(labels=["svm"])) as svm:
     from sklearn.svm import SVC
 
     params = {}
-    model = SVC(**params)
+    model = SVC(probability=True, **params)
     model_name = "svm"
 
     flow()
