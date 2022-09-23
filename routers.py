@@ -3,10 +3,10 @@ import pandas as pd
 import numpy as np
 from uuid import uuid4
 from schemas import HotelForm
-from fastapi import APIRouter, Request, Depends, BackgroundTasks
+
+from fastapi import FastAPI,APIRouter, Request, Depends, BackgroundTasks
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
-import mlflow
 
 sys.path.append(os.pardir)
 from utils.utils import predict_preprocessor
@@ -14,6 +14,17 @@ import environment
 
 redisai_client = environment.redis_r()
 client = environment.mlflow_c()
+preprocessors = {}
+app = FastAPI()
+
+@app.on_event('startup')
+def startup_event():
+    print('test')
+    global preprocessor, metrics
+    preprocessor, metrics = predict_preprocessor()
+    return preprocessor, metrics
+    
+preprocessor, metrics = startup_event()
 
 # router
 router = APIRouter()
@@ -26,7 +37,6 @@ def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form))
 
     data = dict(form_data)
     df = pd.DataFrame([data])
-    preprocessor, metrics = predict_preprocessor(df)
 
     redisai_client.tensorset(
         f"{id}_hotel_input", preprocessor.transform(df).astype(np.float32)
@@ -47,7 +57,6 @@ def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form))
         {"request": request, "form_data": data, "result": result, "metrics": metrics},
     )
 
-
 @router.post("/predict2", response_class=HTMLResponse)
 def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form)):
 
@@ -55,7 +64,7 @@ def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form))
     df = pd.DataFrame([data])
     model_name = "RandomForestClassifier"
     model = mlflow.sklearn.load_model(f"models:/{model_name}/Production")
-    preprocessor, metrics = predict_preprocessor(df)
+    preprocessor, metrics = predict_preprocessor()
     df_new = preprocessor.transform(df)
     pred = model.predict(df_new)
 
