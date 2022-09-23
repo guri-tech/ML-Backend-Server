@@ -4,7 +4,7 @@ import numpy as np
 from uuid import uuid4
 from schemas import HotelForm
 
-from fastapi import FastAPI,APIRouter, Request, Depends, BackgroundTasks
+from fastapi import FastAPI, APIRouter, Request, Depends, BackgroundTasks
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
@@ -17,13 +17,15 @@ client = environment.mlflow_c()
 preprocessors = {}
 app = FastAPI()
 
-@app.on_event('startup')
+
+@app.on_event("startup")
 def startup_event():
-    print('test')
+    print("test")
     global preprocessor, metrics
     preprocessor, metrics = predict_preprocessor()
     return preprocessor, metrics
-    
+
+
 preprocessor, metrics = startup_event()
 
 # router
@@ -56,6 +58,7 @@ def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form))
         "result.html",
         {"request": request, "form_data": data, "result": result, "metrics": metrics},
     )
+
 
 @router.post("/predict2", response_class=HTMLResponse)
 def addData(request: Request, form_data: HotelForm = Depends(HotelForm.as_form)):
