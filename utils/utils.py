@@ -5,7 +5,7 @@ import environment
 client = environment.mlflow_c()
 
 
-def predict_preprocessor(df):
+def predict_preprocessor():
     model_name = "RandomForestClassifier"
     preprocessor = mlflow.sklearn.load_model(f"models:/preprocessor/Production")
 

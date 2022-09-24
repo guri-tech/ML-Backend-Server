@@ -2,3 +2,5 @@ __pycache__
 mlruns/0/meta.yaml
 mlruns
 nohup.out
+.pytest_cache
+fk_rout.py
