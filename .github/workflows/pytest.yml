@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 env: 
-  FAST_API_URI: ${{ secrets.FAST_API_ADDRESS }}
+  # FAST_API_URI: ${{ secrets.FAST_API_ADDRESS }}
   PYTHON: '3.9'
   
 # permissions:
