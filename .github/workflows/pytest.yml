@@ -10,8 +10,8 @@ env:
   FAST_API_ADDRESS: ${{ secrets.FAST_API_ADDRESS }}
   PYTHON: '3.9'
   
-permissions:
-  contents: read
+# permissions:
+#   contents: read
   
 jobs:
   build:
