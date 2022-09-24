@@ -55,6 +55,7 @@ with Flow(name="Hotel_svm", run_config=LocalRun(labels=["svm"])) as svm:
 
 
 if __name__ == "__main__":
-    dt.register(project_name="hotel")
-    rf.register(project_name="hotel")
-    svm.register(project_name="hotel")
+    # dt.register(project_name="hotel")
+    # rf.register(project_name="hotel")
+    # svm.register(project_name="hotel")
+    rf.run()
