@@ -6,12 +6,12 @@ class WebUser(HttpUser):
 
     @task
     def index_page(self):
-        self.client.get(url="/")
+        self.client.get(url="")
 
     @task
     def predict_page(self):
         self.client.post(
-            url="/predict",
+            url="predict3",
             data={
                 "hotel": "City Hotel",
                 "market_segment": "Online TA",

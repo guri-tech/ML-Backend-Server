@@ -25,7 +25,7 @@ from skl2onnx.common.data_types import (
     FloatTensorType,
 )
 from utils.utils_redis import redis_setting_call
-import environment
+import environment as environment
 
 client = environment.mlflow_c()
 redisai_client = environment.redis_r()

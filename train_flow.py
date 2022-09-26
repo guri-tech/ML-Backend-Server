@@ -58,4 +58,4 @@ if __name__ == "__main__":
     # dt.register(project_name="hotel")
     # rf.register(project_name="hotel")
     # svm.register(project_name="hotel")
-    rf.run()
+    dt.run()

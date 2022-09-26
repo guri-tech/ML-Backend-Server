@@ -1,6 +1,6 @@
 import os
 import mlflow
-import environment
+import environment as environment
 
 client = environment.mlflow_c()
 
