@@ -4,11 +4,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
-import routers
+import router.routers as routers
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
-app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="../frontend/templates")
+app.mount("/static", StaticFiles(directory="../frontend/static"), name="static")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -16,7 +16,6 @@ async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-# router
 app.include_router(routers.router)
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@ class WebUser(HttpUser):
     @task
     def predict_page(self):
         self.client.post(
-            url="predict3",
+            url="predict",
             data={
                 "hotel": "City Hotel",
                 "market_segment": "Online TA",

@@ -3,7 +3,7 @@ import os
 import pytest
 from httpx import AsyncClient
 from main import app
-from routers import router
+from router.routers import router
 
 @pytest.mark.asyncio
 async def test_root():

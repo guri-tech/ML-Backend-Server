@@ -5,3 +5,4 @@ nohup.out
 .pytest_cache
 fk_rout.py
 ttest.ipynb
+setup.py

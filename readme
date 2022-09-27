@@ -1,0 +1,40 @@
+# MLOps project
+## MLOps 시스템 구축 
+
+```
+.
+├── backend
+│   ├── main.py
+│   ├── models
+│   ├── router
+│   └── utils
+├── data
+│   ├── bookings.csv
+│   └── bookingscsv_to_db.py
+├── frontend
+│   ├── static
+│   └── templates
+├── pipe
+├── readme
+├── requirements.txt
+├── setup.py
+└── tests
+```
+
+
+|폴더|세부 폴더|설명|
+|-|-|-|
+|backend||MLOps 시스템 구축|
+||main|서비스 제공 api|
+||models|스키마|
+||router|예약 취소 예측 서비스|
+||utils|각종 함수|
+|data||초기 모델 생성 데이터|
+|frontend||홈페이지 생성|
+||static|각종 정적 파일|
+||templates|템플릿 파일|
+|pipe||자동 학습 및 재학습|
+|tests||pytest, locust|
+|requirements||요구 라이브러리|
+
+![](roadmap.png)

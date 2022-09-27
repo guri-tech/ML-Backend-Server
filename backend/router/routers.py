@@ -2,7 +2,7 @@ import sys, os
 import pandas as pd
 import numpy as np
 from uuid import uuid4
-from schemas import HotelForm
+from models.schemas import HotelForm
 import mlflow
 from fastapi import FastAPI, APIRouter, Request, Depends, BackgroundTasks
 from fastapi.responses import HTMLResponse
@@ -11,8 +11,8 @@ from skl2onnx.common.data_types import FloatTensorType
 from skl2onnx import convert_sklearn
 
 sys.path.append(os.pardir)
-from utils.utils import predict_preprocessor
-import environment as environment
+from backend.utils.util import predict_preprocessor
+import backend.utils.environment as environment
 
 app = FastAPI()
 
@@ -37,7 +37,7 @@ router = APIRouter()
 @router.post("/predict", response_class=HTMLResponse)
 def addData(request: Request,
             form_data: HotelForm = Depends(HotelForm.as_form),
-            templates = Jinja2Templates(directory="templates")):
+            templates = Jinja2Templates(directory="../frontend/templates")):
 
     id = str(uuid4())
     data = form_data.dict()
@@ -66,7 +66,7 @@ def addData(request: Request,
 @router.post("/predict2", response_class=HTMLResponse)
 def addData(request: Request,
              form_data: HotelForm = Depends(HotelForm.as_form),
-             templates = Jinja2Templates(directory="templates")):
+             templates = Jinja2Templates(directory="../frontend/templates")):
 
     data = form_data.dict()
     df = pd.DataFrame([data])
@@ -81,7 +81,7 @@ def addData(request: Request,
 @router.post("/predict3", response_class=HTMLResponse)
 def addData(request: Request,
              form_data: HotelForm = Depends(HotelForm.as_form),
-             templates = Jinja2Templates(directory="templates")):
+             templates = Jinja2Templates(directory="../frontend/templates")):
 
     id = str(uuid4())
     data = form_data.dict()
