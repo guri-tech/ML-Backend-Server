@@ -6,25 +6,23 @@ on:
   pull_request:
     branches: [main, develop]
 
-env: 
+env:
   PYTHON: '3.9'
-  
+  FAST_API_URI: ${{ secrets.FAST_API_ADDRESS }}
 permissions:
   contents: read
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    
+
       - name: Install dependencies
         run: |
           pip install pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    
-    
+
+
       - name: Test with pytest
         run: pytest -v
-        env: FAST_API_URI: ${{ secrets.FAST_API_ADDRESS }}
-
