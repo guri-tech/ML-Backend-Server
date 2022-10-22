@@ -1,5 +1,5 @@
 # MLOps project
-## MLOps 시스템 구축 
+## MLOps 시스템 구축
 
 ```
 .
@@ -36,5 +36,3 @@
 |pipe||자동 학습 및 재학습|
 |tests||pytest, locust|
 |requirements||요구 라이브러리|
-
-![](roadmap.png)

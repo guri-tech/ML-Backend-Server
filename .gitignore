@@ -6,3 +6,6 @@ nohup.out
 fk_rout.py
 ttest.ipynb
 setup.py
+minio
+.venv
+.env
