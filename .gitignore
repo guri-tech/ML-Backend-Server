@@ -4,3 +4,7 @@ mlruns
 nohup.out
 .pytest_cache
 fk_rout.py
+.DS_Store
+data/
+trained_model/
+train_code/__pycache__/
